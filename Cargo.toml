@@ -1,0 +1,10 @@
+[package]
+name = "sys-peek"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+# 'derive' allows us to use macros to define our CLI arguments
+clap = { version = "4.0", features = ["derive"] }
+# sysinfo provides a cross-platform wrapper for system metrics
+sysinfo = "0.30"
