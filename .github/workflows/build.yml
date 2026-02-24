@@ -1,11 +1,10 @@
 name: Build
 on:
-  push:
-    branches:
-      - main
   pull_request:
-    types: [opened, synchronize, reopened]
+    branches: [ "main" ]
+
 jobs:
+  # --- JOB 1: Static Analysis ---
   sonarqube:
     name: SonarQube
     runs-on: ubuntu-latest
@@ -17,3 +16,28 @@ jobs:
         uses: SonarSource/sonarqube-scan-action@v6
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  # --- JOB 2: Cross-Platform Build ---
+  build:
+    name: Build on ${{ matrix.os }}
+    # This is the key line: it waits for the sonarqube job to finish successfully
+    needs: sonarqube 
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+
+    steps:
+      - uses: actions/checkout@v4
+        
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Build Binary
+        run: cargo build --release
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: sys-peek-${{ matrix.os }}
+          path: target/release/sys-peek
