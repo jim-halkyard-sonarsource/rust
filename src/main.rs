@@ -13,11 +13,11 @@ use sysinfo::System;
 #[derive(Parser, Debug)]
 #[command(author, version, about)]
 struct Args {
-    /// Number of snapshots
+    /// Number of snapshots to run
     #[arg(short, long)]
     runs: Option<u32>,
 
-    /// Polling interval in seconds
+    /// Polling interval in seconds, default is 5
     #[arg(short, long, default_value_t = 5)]
     interval: u64,
 }
