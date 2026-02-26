@@ -64,8 +64,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: sys-peek-${{ matrix.os }}
-          path: target/release/sys-peek
-          projectBaseDir: sys-peek/
+          path: sys-peek/target/release/sys-peek
 
   build-guessing_game:
     name: Build on ${{ matrix.os }}
@@ -93,5 +92,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: guessing_game-${{ matrix.os }}
-          path: target/release/guessing-game
-          projectBaseDir: guessing_game/
+          path: guessing_game/target/release/guessing-game
+
