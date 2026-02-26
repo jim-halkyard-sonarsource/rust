@@ -58,7 +58,7 @@ jobs:
           components: rustfmt, clippy
 
       - name: Build Binary
-        run: CARGO_TARGET_DIR=sys-peek cargo build --release
+        run: cd sys-peek && cargo build --release
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
@@ -87,7 +87,7 @@ jobs:
           components: rustfmt, clippy
 
       - name: Build Binary
-        run: CARGO_TARGET_DIR=guessing_game cargo build --release
+        run: cd guessing_game && cargo build --release
         
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
