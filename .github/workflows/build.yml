@@ -53,11 +53,12 @@ jobs:
         
       - name: Set up Rust
         uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
+          components: rustfmt, clippy
 
       - name: Build Binary
         run: cargo build --release
-        with:
-          projectBaseDir: sys-peek
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
@@ -81,6 +82,9 @@ jobs:
         
       - name: Set up Rust
         uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
+          components: rustfmt, clippy
 
       - name: Build Binary
         run: cargo build --release
