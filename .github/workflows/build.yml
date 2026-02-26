@@ -1,27 +1,40 @@
-name: Build
+name: Build & Scan Rust monorepo
 on:
   pull_request:
     branches: [ "main" ]
+  workflow_dispatch
 
 jobs:
-  # --- JOB 1: Static Analysis ---
-  sonarqube:
-    name: SonarQube
+  # --- Phase 1: Static Analysis ---
+  scan-sys-peek:
+    name: scan-sys-peek
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v6
+      - name: SonarQube Scan of ${{ name }}
+        uses: SonarSource/sonarqube-scan-action@v7
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-  # --- JOB 2: Cross-Platform Build ---
-  build:
+  scan-guessing_game:
+    name: scan-guessing_game
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: SonarQube Scan of ${{ name }}
+        uses: SonarSource/sonarqube-scan-action@v7
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  # --- Phase 2: Cross-Platform Build ---
+  build-sys-peek:
     name: Build on ${{ matrix.os }}
     # This is the key line: it waits for the sonarqube job to finish successfully
-    needs: sonarqube 
+    needs: scan-sys-peek 
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -41,3 +54,29 @@ jobs:
         with:
           name: sys-peek-${{ matrix.os }}
           path: target/release/sys-peek
+          projectBaseDir: sys-peek/
+
+  build-sys-peek:
+    name: Build on ${{ matrix.os }}
+    # This is the key line: it waits for the sonarqube job to finish successfully
+    needs: scan-guessing_game 
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+
+    steps:
+      - uses: actions/checkout@v4
+        
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Build Binary
+        run: cargo build --release
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: guessing_game-${{ matrix.os }}
+          path: target/release/guessing-game
+          projectBaseDir: guessing_game/
