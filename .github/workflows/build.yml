@@ -45,7 +45,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
+#        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest]
 
     steps:
       - uses: actions/checkout@v4
@@ -55,6 +56,8 @@ jobs:
 
       - name: Build Binary
         run: cargo build --release
+        with:
+          projectBaseDir: sys-peek
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
@@ -70,7 +73,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
+#        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest]
 
     steps:
       - uses: actions/checkout@v4
@@ -80,6 +84,8 @@ jobs:
 
       - name: Build Binary
         run: cargo build --release
+        with:
+          projectBaseDir: guessing_game/
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
