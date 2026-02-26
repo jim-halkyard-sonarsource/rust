@@ -3,26 +3,16 @@ on:
   push:
     branches:
       - main
+    paths:
+      - "guessing_game/**"
   pull_request:
     branches: [ "main" ]
+    paths:
+      - "guessing_game/**"
   workflow_dispatch:
 
 jobs:
   # --- Phase 1: Static Analysis ---
-  scan-sys-peek:
-    name: scan-sys-peek
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      - name: SonarQube Scan of sys-peek
-        uses: SonarSource/sonarqube-scan-action@v7
-        env:
-          SONAR_TOKEN: ${{ secrets.RUST_SYS_PEEK_TOKEN }}
-        with:
-          projectBaseDir: sys-peek/
-
   scan-guessing_game:
     name: scan-guessing_game
     runs-on: ubuntu-latest
@@ -38,33 +28,6 @@ jobs:
           projectBaseDir: guessing_game/
 
   # --- Phase 2: Cross-Platform Build ---
-  build-sys-peek:
-    name: Build on ${{ matrix.os }}
-    needs: scan-sys-peek 
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-#        os: [ubuntu-latest, macos-latest]
-        os: [ubuntu-latest]
-
-    steps:
-      - uses: actions/checkout@v4
-        
-      - name: Set up Rust
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          toolchain: stable
-          components: rustfmt, clippy
-
-      - name: Build Binary
-        run: cd sys-peek && cargo build --release
-
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: sys-peek-${{ matrix.os }}
-          path: ./sys-peek/target/release/sys-peek
-
   build-guessing_game:
     name: Build on ${{ matrix.os }}
     # This is the key line: it waits for the sonarqube job to finish successfully
@@ -85,12 +48,7 @@ jobs:
           components: rustfmt, clippy
 
       - name: Build Binary
-        run: |
-          pwd
-          cd guessing_game && cargo build --release
-          pwd
-          find . -name guessing_game
-          ls -R
+        run: cd guessing_game && cargo build --release
         
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
