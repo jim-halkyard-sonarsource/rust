@@ -56,7 +56,7 @@ jobs:
           path: target/release/sys-peek
           projectBaseDir: sys-peek/
 
-  build-sys-peek:
+  build-guessing_game:
     name: Build on ${{ matrix.os }}
     # This is the key line: it waits for the sonarqube job to finish successfully
     needs: scan-guessing_game 
