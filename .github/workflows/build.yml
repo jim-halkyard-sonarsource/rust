@@ -2,7 +2,7 @@ name: Build & Scan Rust monorepo
 on:
   pull_request:
     branches: [ "main" ]
-  workflow_dispatch
+  workflow_dispatch:
 
 jobs:
   # --- Phase 1: Static Analysis ---
