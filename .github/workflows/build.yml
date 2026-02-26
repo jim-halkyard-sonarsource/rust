@@ -20,6 +20,7 @@ jobs:
         uses: SonarSource/sonarqube-scan-action@v7
         env:
           SONAR_TOKEN: ${{ secrets.RUST_SYS_PEEK_TOKEN }}
+          projectBaseDir: sys-peek/
 
   scan-guessing_game:
     name: scan-guessing_game
@@ -32,6 +33,7 @@ jobs:
         uses: SonarSource/sonarqube-scan-action@v7
         env:
           SONAR_TOKEN: ${{ secrets.RUST_GUESSING_GAME_TOKEN }}
+          projectBaseDir: guessing_game/
 
   # --- Phase 2: Cross-Platform Build ---
   build-sys-peek:
