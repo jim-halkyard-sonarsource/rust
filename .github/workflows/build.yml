@@ -86,7 +86,9 @@ jobs:
 
       - name: Build Binary
         run: |
+          pwd
           cd guessing_game && cargo build --release
+          pwd
           find . -name guessing_game
           ls -R
         
