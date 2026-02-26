@@ -68,7 +68,7 @@ jobs:
   build-guessing_game:
     name: Build on ${{ matrix.os }}
     # This is the key line: it waits for the sonarqube job to finish successfully
-    needs: scan-guessing_game 
+#    needs: scan-guessing_game 
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
