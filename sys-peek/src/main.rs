@@ -117,9 +117,34 @@ fn report_power() {
 #[cfg(test)]
 mod tests {
     use super::*;
+#[test]
+    fn test_cpu_usage_calculation() {
+        // T1: Simulate a CPU that was 50% busy
+        let start = CpuSnapshot { 
+            user: 100, nice: 0, system: 100, idle: 200, 
+            iowait: 0, irq: 0, softirq: 0 
+        }; // Total = 400
+        
+        let end = CpuSnapshot { 
+            user: 200, nice: 0, system: 200, idle: 400, 
+            iowait: 0, irq: 0, softirq: 0 
+        }; // Total = 800 (Delta Total = 400, Delta Idle = 200)
+
+        let usage = calculate_usage(&start, &end);
+        assert_eq!(usage, 50.0, "CPU usage should be exactly 50%");
+    }
 
     #[test]
+    fn test_zero_delta_handling() {
+        // T2: Ensure we don't divide by zero if called too quickly
+        let start = CpuSnapshot { user: 10, nice: 0, system: 0, idle: 10, iowait: 0, irq: 0, softirq: 0 };
+        let usage = calculate_usage(&start, &start);
+        assert_eq!(usage, 0.0, "Zero delta should return 0% usage, not a crash");
+    }
+    
+    #[test]
     fn test_format_bytes() {
+        // T3: Make sure we are formatting data correctly
         assert_eq!(format_bytes(1024), "1.00 KB");
         assert_eq!(format_bytes(1048576), "1.00 MB");
         assert_eq!(format_bytes(1073741824), "1.00 GB");
