@@ -16,7 +16,7 @@ jobs:
       - name: SonarQube Scan of sys-peek
         uses: SonarSource/sonarqube-scan-action@v7
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.RUST_SYS_PEEK_TOKEN }}
 
   scan-guessing_game:
     name: scan-guessing_game
@@ -28,7 +28,7 @@ jobs:
       - name: SonarQube Scan of guessing_game
         uses: SonarSource/sonarqube-scan-action@v7
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.RUST_GUESSING_GAME_TOKEN }}
 
   # --- Phase 2: Cross-Platform Build ---
   build-sys-peek:
