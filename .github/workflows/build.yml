@@ -96,5 +96,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: guessing_game-${{ matrix.os }}
-          path: /home/runner/work/rust/rust/guessing_game/target/release/guessing_game
+          path: ./guessing_game/target/release/guessing_game
 
