@@ -1,4 +1,4 @@
-name: Build & Scan Rust monorepo
+name: Build & Scan rust/sys-peek
 on:
   push:
     branches:

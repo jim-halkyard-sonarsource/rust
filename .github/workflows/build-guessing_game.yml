@@ -1,4 +1,4 @@
-name: Build & Scan Rust monorepo
+name: Build & Scan rust/guessing_game
 on:
   push:
     branches:
